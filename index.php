@@ -61,17 +61,19 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			
 			<div id="filter-wrap">
 				
-                                <?php if(isset($_GET['district'])):?>
                                 <?php
                                 $districts = array();
                                 $jsonData = '';
                                if (($handle = fopen("data/report.csv", "r")) !== FALSE) {
                                     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                                        if(isset($_GET['district'])){
+
                                         if(strtolower($data[0]) == strtolower($_GET['district'])){
                                             $out['one_to_six'] = $data[6];
                                             $out['six_to_eight'] = $data[7];
                                             $out['eight_to_ten'] = $data[8];
                                             $jsonData = json_encode($out);
+                                        }
                                         }
                                         $districts[] = strtolower($data[0]);
                                     }
@@ -92,7 +94,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                     </form>
 				</div>
                                 <div id="chart-data" class='<?php echo $jsonData;?>'></div>
-                                <?php endif; ?>
                                 <div id="chart">
 				</div>
                                 <?php if($jsonData):?>
