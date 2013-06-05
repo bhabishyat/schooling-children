@@ -85,10 +85,10 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                 <div class="filter">
                                     <form id="district-form" method='get'>
 					<label for="">Enrollment by District:</label>
-					<select name="district" id="district" onchange="this.form.submit()">
+					<select name="district" id="district" onchange="this.form.submit()" >
                                             	<option value="">---Select District---</option>
                                             <?php foreach($districts as $district): ?>
-						<option value="<?php echo $district;?>"><?php echo ucfirst($district) ?></option>
+						<option value="<?php echo $district;?>" <?php if($_GET['district'] && strtolower($district)==strtolower($_GET['district'])){ echo "selected=selected";}?>><?php echo ucfirst($district) ?></option>
                                             <?php endforeach;?>
 					</select>
                                     </form>
