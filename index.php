@@ -17,6 +17,7 @@ padding-top: 10px;
 width: 800px;
 }
 </style>
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
 <script type="text/javascript">
@@ -45,32 +46,34 @@ templateId: 2
 
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    
 </head>
 
 <body>
 	<div id="wrapper">
 		<div id="page">
 			<div id="logo-wrap">
-				<h1>Schooling Children</h1>
+				<h1><img src="images/logo.png" /></h1>
 			</div>
 			
 			<div id="googft-mapCanvas"></div>
 			
 			<div id="filter-wrap">
 				<div class="filter">
-                                    <form id="district" method='post'>
+                                    <form id="district-form" method='get'>
 					<label for="">Filter</label>
-					<select name="district" id="district">
+					<select name="district" id="district" onchange="this.form.submit()">
 						<option value="">---Select District---</option>
 						<option value="kathmandu">Kathmandu</option>
-						<option value="">Kavre</option>
-						<option value="">Bhaktapur</option>
-						<option value="">Lalitpur</option>
-						<option value="">Nuwakot</option>
+						<option value="Kavre">Kavre</option>
+						<option value="Bhaktapur">Bhaktapur</option>
+						<option value="Lalitpur">Lalitpur</option>
+						<option value="Nuwakot">Nuwakot</option>
+                                                <option value="Dolpa">Dolpa</option>
 					</select>
                                     </form>
 				</div>
-				<div class="chart">
                                 <?php if(isset($_GET['district'])):?>
                                 <?php 
                                if (($handle = fopen("data/report.csv", "r")) !== FALSE) {
@@ -87,9 +90,44 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                     print ('could not open');exit;
                                 }
                                 ?>
-                                <div id="chart-data" data:json="<?php echo $jsonData;?>"></div>
+                                <div id="chart-data" class='<?php echo $jsonData;?>'></div>
                                 <?php endif; ?>
+                                <div id="chart">
 				</div>
+                                <?php if($jsonData):?>
+                                <script>
+                                google.load('visualization', '1.0', {'packages':['corechart']});
+                                
+                                // Set a callback to run when the Google Visualization API is loaded.
+                                google.setOnLoadCallback(drawChart);
+                                
+                                      // Callback that creates and populates a data table,
+                                      // instantiates the pie chart, passes in the data and
+                                      // draws it.
+                                      function drawChart() {
+                                        var inputData = $('#chart-data').attr('class');
+                                        console.log(inputData);
+                                        // Create the data table.
+                                        var data = new google.visualization.DataTable();
+                                        data.addColumn('string', 'Topping');
+                                        data.addColumn('number', 'Slices');
+                                        data.addRows([
+                                          ['Level 1-6', <?php echo $out['one_to_six'];?>],
+                                          ['Level 6-8', <?php echo $out['six_to_eight'];?>],
+                                          ['Level 8-10', <?php echo $out['eight_to_ten'];?>],
+                                        ]);
+                                
+                                        // Set chart options
+                                        var options = {'title':'Students Enrolling in different Level',
+                                                       'width':400,
+                                                       'height':300};
+                                
+                                        // Instantiate and draw our chart, passing in some options.
+                                        var chart = new google.visualization.PieChart(document.getElementById('chart'));
+                                        chart.draw(data, options);
+                                      }
+                                      </script>
+                                <? endif;?>
 			</div>
 		</div><!--End #page-->
 	</div><!--End #wrapper-->
