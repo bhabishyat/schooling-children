@@ -60,22 +60,11 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			<div id="googft-mapCanvas"></div>
 			
 			<div id="filter-wrap">
-				<div class="filter">
-                                    <form id="district-form" method='get'>
-					<label for="">Filter</label>
-					<select name="district" id="district" onchange="this.form.submit()">
-						<option value="">---Select District---</option>
-						<option value="kathmandu">Kathmandu</option>
-						<option value="Kavre">Kavre</option>
-						<option value="Bhaktapur">Bhaktapur</option>
-						<option value="Lalitpur">Lalitpur</option>
-						<option value="Nuwakot">Nuwakot</option>
-                                                <option value="Dolpa">Dolpa</option>
-					</select>
-                                    </form>
-				</div>
+				
                                 <?php if(isset($_GET['district'])):?>
-                                <?php 
+                                <?php
+                                $districts = array();
+                                $jsonData = '';
                                if (($handle = fopen("data/report.csv", "r")) !== FALSE) {
                                     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                                         if(strtolower($data[0]) == strtolower($_GET['district'])){
@@ -84,12 +73,24 @@ google.maps.event.addDomListener(window, 'load', initialize);
                                             $out['eight_to_ten'] = $data[8];
                                             $jsonData = json_encode($out);
                                         }
+                                        $districts[] = strtolower($data[0]);
                                     }
                                     fclose($handle);
                                 } else {
                                     print ('could not open');exit;
                                 }
                                 ?>
+                                <div class="filter">
+                                    <form id="district-form" method='get'>
+					<label for="">Enrollment by District:</label>
+					<select name="district" id="district" onchange="this.form.submit()">
+                                            	<option value="">---Select District---</option>
+                                            <?php foreach($districts as $district): ?>
+						<option value="<?php echo $district;?>"><?php echo ucfirst($district) ?></option>
+                                            <?php endforeach;?>
+					</select>
+                                    </form>
+				</div>
                                 <div id="chart-data" class='<?php echo $jsonData;?>'></div>
                                 <?php endif; ?>
                                 <div id="chart">
