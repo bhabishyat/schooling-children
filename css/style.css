@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	background: #1ba8aa url(../images/bg.png);
+	font: normal 12px/18px Arial, sans-serif;
+}
+#wrapper{
+	padding: 20px 0;
+}
+#page{
+	margin: 0 auto; 
+	padding: 0; 
+	width: 900px;
+}
+#logo-wrap{
+	margin-bottom: 10px;
+}
+#logo-wrap h1{
+	font-family: 'Rokkitt', serif;
+	font-size: 34px;
+	text-align: center;
+	text-transform: uppercase;
+	line-height: 40px;
+	color: #004142;
+}
+#map-wrap{
+	background: #fff;
+	border: 5px solid #0d8d8f;
+	height: 400px;
+	margin-bottom: 20px;
+}
+#filter-wrap{
+	background: #0d8d8f;
+	padding: 20px;
+	color: #333333;
+}
+.filter{
+	margin-bottom: 10px;
+}
+.chart{
+	background: #ffffff;
+	height: 300px;
+}
